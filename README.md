@@ -64,6 +64,7 @@ library(ggplot2)
 plot<-ggplot(final_data, aes(x = as.Date(Date), y = (max(final_data$value)-value))) + 
   geom_line(aes(color = variable,group=1)) +
   geom_line(data = final_data,aes(x = as.Date(Date), y = Runoff.))+
+  xlab("Date")+
   # set date breaks
   scale_x_date(date_breaks = "1 month", date_labels = "%b")+
   scale_color_manual(values = c("darkred", "steelblue","purple"))+
