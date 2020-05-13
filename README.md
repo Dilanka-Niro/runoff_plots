@@ -1,3 +1,4 @@
+```r
 # Set working directory
 setwd("~/Desktop/Dilanka_ayya")
 
@@ -95,3 +96,4 @@ final_plot<-plot+facet_wrap(vars(Year),scales = "free")
 ggsave(filename = "plot.pdf",plot = final_plot,height = 10, width = 20)
 #ggsave(filename = "runoff_plot.pdf",plot = final_runoff_plot,height = 10, width = 20)
   
+```
