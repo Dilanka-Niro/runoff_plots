@@ -1,6 +1,3 @@
-# Runoff_plots
-
-```r
 # Set working directory
 setwd("~/Desktop/Dilanka_ayya")
 
@@ -8,6 +5,14 @@ setwd("~/Desktop/Dilanka_ayya")
 #install.packages("gdata") - Uncomment this if gdata is not working
 require(gdata)
 require(dplyr)
+
+#test<-c(1:50)
+#function
+setlim<-function(x){if (x>30) {x<-30
+  
+}else x<-x}
+
+#filtered<-lapply(test, setlim)
 
 # load precipitationdata for all years in dirrerent dataframes and Add a column for year, combine with runoff data
 
@@ -56,14 +61,14 @@ final_data[is.na(final_data)] = 0
 
 #read 'Date' in date format
 final_data[['Date']] <- as.POSIXct(final_data[['Date']], format='%m/%d/%y')
-
+final_data$runoff_filtered<-unlist(lapply(final_data$Runoff.,setlim))
 # load ggplot
 library(ggplot2)
 
 #create plot 
 plot<-ggplot(final_data, aes(x = as.Date(Date), y = (max(final_data$value)-value))) + 
   geom_line(aes(color = variable,group=1)) +
-  geom_line(data = final_data,aes(x = as.Date(Date), y = Runoff.))+
+  geom_line(data = final_data,aes(x = as.Date(Date), y = runoff_filtered))+
   xlab("Date")+
   # set date breaks
   scale_x_date(date_breaks = "1 month", date_labels = "%b")+
@@ -90,4 +95,3 @@ final_plot<-plot+facet_wrap(vars(Year),scales = "free")
 ggsave(filename = "plot.pdf",plot = final_plot,height = 10, width = 20)
 #ggsave(filename = "runoff_plot.pdf",plot = final_runoff_plot,height = 10, width = 20)
   
-  ```
