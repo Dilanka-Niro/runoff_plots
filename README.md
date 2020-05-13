@@ -67,7 +67,7 @@ final_data$runoff_filtered<-unlist(lapply(final_data$Runoff.,setlim))
 library(ggplot2)
 
 #create plot 
-plot<-ggplot(final_data, aes(x = as.Date(Date), y = (max(final_data$value)-value))) + 
+plot<-ggplot(final_data, aes(x = as.Date(Date), y = (60-value))) + 
   geom_line(aes(color = variable,group=1)) +
   geom_line(data = final_data,aes(x = as.Date(Date), y = runoff_filtered))+
   xlab("Date")+
@@ -76,7 +76,7 @@ plot<-ggplot(final_data, aes(x = as.Date(Date), y = (max(final_data$value)-value
   scale_color_manual(values = c("darkred", "steelblue","purple"))+
   
   #add second Y axis
-  scale_y_continuous(
+  scale_y_continuous(limits = c(0,60),
     
     # Features of the first axis
     name = "Runoff",
