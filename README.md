@@ -13,6 +13,10 @@ setlim<-function(x){if (x>30) {x<-30
   
 }else x<-x}
 
+#make a column for NA values
+NA_bar<-function(x){if (x==0.12345) {x<-30
+
+}else x<-0}
 #filtered<-lapply(test, setlim)
 
 # load precipitationdata for all years in dirrerent dataframes and Add a column for year, combine with runoff data
@@ -58,18 +62,25 @@ final_data <- all_data %>%
   gather(key = "variable", value = "value", Rain, Snow, Total)
 
 #Replace NA with 0
-final_data[is.na(final_data)] = 0
+final_data[is.na(final_data)] = 0.12345
 
 #read 'Date' in date format
 final_data[['Date']] <- as.POSIXct(final_data[['Date']], format='%m/%d/%y')
 final_data$runoff_filtered<-unlist(lapply(final_data$Runoff.,setlim))
+#NA column for pecipitation
+final_data$NA_prec<-unlist(lapply(final_data$value,NA_bar))
+#NA column for runoff
+final_data$NA_runoff<-unlist(lapply(final_data$runoff_filtered,NA_bar))
 # load ggplot
 library(ggplot2)
 
 #create plot 
 plot<-ggplot(final_data, aes(x = as.Date(Date), y = (60-value))) + 
+  theme_bw()+
   geom_line(aes(color = variable,group=1)) +
   geom_line(data = final_data,aes(x = as.Date(Date), y = runoff_filtered))+
+  geom_line(data = final_data,aes(x = as.Date(Date), y = (60-NA_prec)),color="white")+
+  geom_line(data = final_data,aes(x = as.Date(Date), y = NA_runoff),color="white")+
   xlab("Date")+
   # set date breaks
   scale_x_date(date_breaks = "1 month", date_labels = "%b")+
